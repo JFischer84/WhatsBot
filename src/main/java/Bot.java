@@ -10,25 +10,24 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Bot {
 
 	private static final String CHAT_NAME = "Test mit Space";
-	private static final int TIMES = 3;
+	private static final int TIMES = 5;
 	private static final String GIPHY_API_KEY = "FiswI79DR5yAcxTLvAvVqbk0K26azCUl";
 
 
-	public static void main(String[] args) throws GiphyException, InterruptedException {
+	public static void main(String[] args) throws GiphyException {
 		Giphy giphy = new Giphy(GIPHY_API_KEY);
 		ProfilesIni profile = new ProfilesIni();
 		FirefoxProfile firefoxProfile = profile.getProfile("Testbenutzer");
 		WebDriver driver = new FirefoxDriver(firefoxProfile);
 		driver.get("https://web.whatsapp.com");
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		WebDriverWait wait = new WebDriverWait(driver, 5);
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("span[title='" + CHAT_NAME + "']")));
 		driver.findElement(By.cssSelector("span[title='" + CHAT_NAME + "']")).click();
 
 		List<WebElement> list = driver.findElements(By.className("pluggable-input-body"));
@@ -43,9 +42,11 @@ public class Bot {
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "c"));
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "v"));
-			Thread.sleep(1000);
+
+			wait.until(ExpectedConditions.elementToBeClickable(By.className("pluggable-input-default")));
 
 			WebElement title = driver.findElement(By.className("pluggable-input-default"));
+			title.click();
 			title.sendKeys(Keys.chord(Keys.ENTER));
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
 			selectedElement.sendKeys(Keys.chord(Keys.DELETE));
