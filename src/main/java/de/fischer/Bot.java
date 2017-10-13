@@ -17,8 +17,9 @@ public class Bot {
 
 	private String fireFoxUserProfile;
 	private WebDriver driver;
-	private WebDriverWait wait;
 	private GifProvider gifProvider;
+
+
 	public Bot(String firefoxUserProfile) {
 		this.fireFoxUserProfile = firefoxUserProfile;
 	}
@@ -53,7 +54,6 @@ public class Bot {
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
 			selectedElement.sendKeys(Keys.chord(Keys.DELETE));
 		}
-
 	}
 
 	private void startUp() {
