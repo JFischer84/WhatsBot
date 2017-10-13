@@ -16,24 +16,30 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class Bot {
 
 	private static final String CHAT_NAME = "Test mit Space";
-	private static final int TIMES = 5;
+	private static final int TIMES = 3;
 	private static final String GIPHY_API_KEY = "FiswI79DR5yAcxTLvAvVqbk0K26azCUl";
+	private static final String SEARCH_TAG = "kitten";
+	private static final String FIREFOX_USER_PROFILE = "Testbenutzer";
 
 
 	public static void main(String[] args) throws GiphyException {
 		Giphy giphy = new Giphy(GIPHY_API_KEY);
 		ProfilesIni profile = new ProfilesIni();
-		FirefoxProfile firefoxProfile = profile.getProfile("Testbenutzer");
+		FirefoxProfile firefoxProfile = profile.getProfile(FIREFOX_USER_PROFILE);
 		WebDriver driver = new FirefoxDriver(firefoxProfile);
 		driver.get("https://web.whatsapp.com");
-		WebDriverWait wait = new WebDriverWait(driver, 5);
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.elementToBeClickable(By.className("input-search")));
+		WebElement searchBar = driver.findElement(By.className("input-search"));
+		searchBar.click();
+		searchBar.sendKeys(CHAT_NAME);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("span[title='" + CHAT_NAME + "']")));
 		driver.findElement(By.cssSelector("span[title='" + CHAT_NAME + "']")).click();
 
 		List<WebElement> list = driver.findElements(By.className("pluggable-input-body"));
 		WebElement selectedElement = list.get(0);
 		for (int i = 0; i < TIMES; i++) {
-			SearchRandom giphyData = giphy.searchRandom("cat");
+			SearchRandom giphyData = giphy.searchRandom(SEARCH_TAG);
 			String rootUrl = giphyData.getData().getImageUrl();
 			String[] urlParts = rootUrl.split("\\.");
 			urlParts[0] = urlParts[0].substring(0, urlParts[0].length() - 1);
