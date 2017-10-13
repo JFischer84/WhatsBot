@@ -9,7 +9,6 @@ public class App {
 	private static final String SEARCH_TAG = "kitten";
 	private static final String FIREFOX_USER_PROFILE = "Testbenutzer";
 
-
 	public static void main(String[] args) {
 		Bot bot = new Bot(FIREFOX_USER_PROFILE);
 		try {
@@ -17,6 +16,5 @@ public class App {
 		} catch (GiphyException e) {
 			e.printStackTrace();
 		}
-
 	}
 }

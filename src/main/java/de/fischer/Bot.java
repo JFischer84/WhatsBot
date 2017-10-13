@@ -18,7 +18,7 @@ public class Bot {
 	private String fireFoxUserProfile;
 	private WebDriver driver;
 	private WebDriverWait wait;
-	GifProvider gifProvider;
+	private GifProvider gifProvider;
 	public Bot(String firefoxUserProfile) {
 		this.fireFoxUserProfile = firefoxUserProfile;
 	}
@@ -26,18 +26,20 @@ public class Bot {
 	public void spam(String chatName, String searchTag, int times) throws GiphyException {
 		startUp();
 		driver.get("https://web.whatsapp.com");
-		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("input-search")));
 		WebElement searchBar = driver.findElement(By.className("input-search"));
 		searchBar.click();
 		searchBar.sendKeys(chatName);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("span[title='" + chatName + "']")));
 		driver.findElement(By.cssSelector("span[title='" + chatName + "']")).click();
-
 		List<WebElement> list = driver.findElements(By.className("pluggable-input-body"));
 		WebElement selectedElement = list.get(0);
+		String processedUrl;
+		WebElement title;
+
 		for (int i = 0; i < times; i++) {
-			String processedUrl = gifProvider.provideRandom(searchTag);
+			processedUrl = gifProvider.provideRandom(searchTag);
 			selectedElement.sendKeys(processedUrl);
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "c"));
@@ -45,7 +47,7 @@ public class Bot {
 
 			wait.until(ExpectedConditions.elementToBeClickable(By.className("pluggable-input-default")));
 
-			WebElement title = driver.findElement(By.className("pluggable-input-default"));
+			title = driver.findElement(By.className("pluggable-input-default"));
 			title.click();
 			title.sendKeys(Keys.chord(Keys.ENTER));
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
