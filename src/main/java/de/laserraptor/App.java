@@ -1,4 +1,4 @@
-package de.fischer;
+package de.laserraptor;
 
 import at.mukprojects.giphy4j.exception.GiphyException;
 

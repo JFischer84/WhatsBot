@@ -1,4 +1,4 @@
-package de.fischer;
+package de.laserraptor;
 
 import java.util.List;
 
