@@ -1,7 +1,7 @@
+package de.fischer;
+
 import java.util.List;
 
-import at.mukprojects.giphy4j.Giphy;
-import at.mukprojects.giphy4j.entity.search.SearchRandom;
 import at.mukprojects.giphy4j.exception.GiphyException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -15,35 +15,29 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Bot {
 
-	private static final String CHAT_NAME = "Test mit Space";
-	private static final int TIMES = 3;
-	private static final String GIPHY_API_KEY = "FiswI79DR5yAcxTLvAvVqbk0K26azCUl";
-	private static final String SEARCH_TAG = "kitten";
-	private static final String FIREFOX_USER_PROFILE = "Testbenutzer";
+	private String fireFoxUserProfile;
+	private WebDriver driver;
+	private WebDriverWait wait;
+	GifProvider gifProvider;
+	public Bot(String firefoxUserProfile) {
+		this.fireFoxUserProfile = firefoxUserProfile;
+	}
 
-
-	public static void main(String[] args) throws GiphyException {
-		Giphy giphy = new Giphy(GIPHY_API_KEY);
-		ProfilesIni profile = new ProfilesIni();
-		FirefoxProfile firefoxProfile = profile.getProfile(FIREFOX_USER_PROFILE);
-		WebDriver driver = new FirefoxDriver(firefoxProfile);
+	public void spam(String chatName, String searchTag, int times) throws GiphyException {
+		startUp();
 		driver.get("https://web.whatsapp.com");
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("input-search")));
 		WebElement searchBar = driver.findElement(By.className("input-search"));
 		searchBar.click();
-		searchBar.sendKeys(CHAT_NAME);
-		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("span[title='" + CHAT_NAME + "']")));
-		driver.findElement(By.cssSelector("span[title='" + CHAT_NAME + "']")).click();
+		searchBar.sendKeys(chatName);
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("span[title='" + chatName + "']")));
+		driver.findElement(By.cssSelector("span[title='" + chatName + "']")).click();
 
 		List<WebElement> list = driver.findElements(By.className("pluggable-input-body"));
 		WebElement selectedElement = list.get(0);
-		for (int i = 0; i < TIMES; i++) {
-			SearchRandom giphyData = giphy.searchRandom(SEARCH_TAG);
-			String rootUrl = giphyData.getData().getImageUrl();
-			String[] urlParts = rootUrl.split("\\.");
-			urlParts[0] = urlParts[0].substring(0, urlParts[0].length() - 1);
-			String processedUrl = String.join(".", urlParts);
+		for (int i = 0; i < times; i++) {
+			String processedUrl = gifProvider.provideRandom(searchTag);
 			selectedElement.sendKeys(processedUrl);
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "c"));
@@ -57,5 +51,13 @@ public class Bot {
 			selectedElement.sendKeys(Keys.chord(Keys.COMMAND, "a"));
 			selectedElement.sendKeys(Keys.chord(Keys.DELETE));
 		}
+
+	}
+
+	private void startUp() {
+		gifProvider = new GifProvider();
+		ProfilesIni profile = new ProfilesIni();
+		FirefoxProfile firefoxProfile = profile.getProfile(fireFoxUserProfile);
+		driver = new FirefoxDriver(firefoxProfile);
 	}
 }
