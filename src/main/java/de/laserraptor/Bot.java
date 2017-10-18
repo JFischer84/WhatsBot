@@ -1,5 +1,6 @@
 package de.laserraptor;
 
+import java.io.File;
 import java.util.List;
 
 import at.mukprojects.giphy4j.exception.GiphyException;
@@ -8,8 +9,10 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -57,9 +60,12 @@ public class Bot {
 	}
 
 	private void startUp() {
+		System.setProperty("webdriver.gecko.driver", "./src/main/resources/geckodriver");
 		gifProvider = new GifProvider();
 		ProfilesIni profile = new ProfilesIni();
 		FirefoxProfile firefoxProfile = profile.getProfile(fireFoxUserProfile);
-		driver = new FirefoxDriver(firefoxProfile);
+		FirefoxOptions firefoxOptions = new FirefoxOptions();
+		firefoxOptions.setProfile(firefoxProfile);
+		driver = new FirefoxDriver(firefoxOptions);
 	}
 }

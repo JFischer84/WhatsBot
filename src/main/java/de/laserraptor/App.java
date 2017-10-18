@@ -5,7 +5,7 @@ import at.mukprojects.giphy4j.exception.GiphyException;
 public class App {
 
 	private static final String CHAT_NAME = "Test mit Space";
-	private static final int TIMES = 3;
+	private static final int TIMES = 5;
 	private static final String SEARCH_TAG = "kitten";
 	private static final String FIREFOX_USER_PROFILE = "Testbenutzer";
 
