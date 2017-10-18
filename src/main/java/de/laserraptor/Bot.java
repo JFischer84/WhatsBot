@@ -60,7 +60,7 @@ public class Bot {
 	}
 
 	private void startUp() {
-		System.setProperty("webdriver.gecko.driver", "./src/main/resources/geckodriver");
+		System.setProperty("webdriver.gecko.driver", "./src/main/resources/geckodriver_14");
 		gifProvider = new GifProvider();
 		ProfilesIni profile = new ProfilesIni();
 		FirefoxProfile firefoxProfile = profile.getProfile(fireFoxUserProfile);
